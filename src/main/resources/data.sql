@@ -1,0 +1,2 @@
+INSERT INTO CATEGORIA VALUES (null, 'Informática')
+INSERT INTO CATEGORIA VALUES (null, 'Escritório')
