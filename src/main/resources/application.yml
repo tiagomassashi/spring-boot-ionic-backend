@@ -1,0 +1,20 @@
+# Propriedades da aplicacao Spring Boot
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      
+# Configuracao do datasource
+spring.datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    
+# configuracao do jpa
+spring.jpa:
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true 
