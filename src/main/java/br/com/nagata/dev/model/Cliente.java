@@ -8,12 +8,11 @@ import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import br.com.nagata.dev.model.enums.TipoCliente;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -37,10 +36,9 @@ public class Cliente implements Serializable {
   private String nome;
   private String email;
   private String cpgOuCnpj;
-
-  @Enumerated(EnumType.STRING)
   private TipoCliente tipo;
 
+  @JsonManagedReference
   @OneToMany(mappedBy = "cliente")
   private List<Endereco> enderecos = new ArrayList<>();
 
