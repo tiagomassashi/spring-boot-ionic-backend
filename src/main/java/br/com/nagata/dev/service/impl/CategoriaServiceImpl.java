@@ -1,8 +1,8 @@
 package br.com.nagata.dev.service.impl;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import br.com.nagata.dev.exception.ObjectNotFoundException;
 import br.com.nagata.dev.model.Categoria;
 import br.com.nagata.dev.repository.CategoriaRepository;
 import br.com.nagata.dev.service.CategoriaService;
@@ -19,7 +19,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
   @Override
   public Categoria buscar(Integer id) {
-    Optional<Categoria> categoria = repository.findById(id);
-    return categoria.orElse(null);
+    return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
+        "Objeto não encontrado ID: " + id + ", Tipo: " + Categoria.class.getName()));
   }
 }
