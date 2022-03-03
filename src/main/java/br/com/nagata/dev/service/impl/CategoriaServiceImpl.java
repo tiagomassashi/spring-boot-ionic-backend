@@ -1,5 +1,6 @@
 package br.com.nagata.dev.service.impl;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,10 @@ public class CategoriaServiceImpl implements CategoriaService {
     } catch (DataIntegrityViolationException e) {
       throw new DataIntegrityException("Não é possível excluir uma Categoria que possui produtos");
     }
+  }
+
+  @Override
+  public List<Categoria> findAll() {
+    return repository.findAll();
   }
 }

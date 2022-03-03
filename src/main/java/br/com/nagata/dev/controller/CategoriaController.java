@@ -1,6 +1,8 @@
 package br.com.nagata.dev.controller;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.nagata.dev.model.Categoria;
+import br.com.nagata.dev.model.dto.CategoriaDTO;
 import br.com.nagata.dev.service.CategoriaService;
 
 @RestController
@@ -50,5 +53,11 @@ public class CategoriaController {
   public ResponseEntity<Categoria> delete(@PathVariable Integer id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping
+  public ResponseEntity<List<CategoriaDTO>> findAll() {
+    return ResponseEntity.ok()
+        .body(service.findAll().stream().map(CategoriaDTO::new).collect(Collectors.toList()));
   }
 }
