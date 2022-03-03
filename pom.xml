@@ -6,12 +6,12 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.6.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>br.com.nagata.dev</groupId>
-	<artifactId>dev-curso-mc</artifactId>
+	<artifactId>spring-boot-ionic-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>dev-curso-mc</name>
+	<name>spring-boot-ionic-backend</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
