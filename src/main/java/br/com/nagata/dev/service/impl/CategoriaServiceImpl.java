@@ -1,7 +1,9 @@
 package br.com.nagata.dev.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import br.com.nagata.dev.exception.DataIntegrityException;
 import br.com.nagata.dev.exception.ObjectNotFoundException;
 import br.com.nagata.dev.model.Categoria;
 import br.com.nagata.dev.repository.CategoriaRepository;
@@ -33,5 +35,16 @@ public class CategoriaServiceImpl implements CategoriaService {
   public Categoria update(Categoria categoria) {
     this.find(categoria.getId());
     return repository.save(categoria);
+  }
+
+  @Override
+  public void delete(Integer id) {
+    this.find(id);
+
+    try {
+      repository.deleteById(id);
+    } catch (DataIntegrityViolationException e) {
+      throw new DataIntegrityException("Não é possível excluir uma Categoria que possui produtos");
+    }
   }
 }

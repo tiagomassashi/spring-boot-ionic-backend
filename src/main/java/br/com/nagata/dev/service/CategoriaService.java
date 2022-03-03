@@ -9,4 +9,6 @@ public interface CategoriaService {
   Categoria insert(Categoria categoria);
 
   Categoria update(Categoria categoria);
+
+  void delete(Integer id);
 }

@@ -16,4 +16,13 @@ public class ExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
   }
+
+  @org.springframework.web.bind.annotation.ExceptionHandler(DataIntegrityException.class)
+  public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException excpetion,
+      HttpServletRequest request) {
+    StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), excpetion.getMessage(),
+        System.currentTimeMillis());
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
 }
