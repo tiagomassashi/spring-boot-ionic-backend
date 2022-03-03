@@ -18,7 +18,7 @@ public class CategoriaServiceImpl implements CategoriaService {
   }
 
   @Override
-  public Categoria buscar(Integer id) {
+  public Categoria find(Integer id) {
     return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
         "Objeto não encontrado ID: " + id + ", Tipo: " + Categoria.class.getName()));
   }
@@ -26,6 +26,12 @@ public class CategoriaServiceImpl implements CategoriaService {
   @Override
   public Categoria insert(Categoria categoria) {
     categoria.setId(null);
+    return repository.save(categoria);
+  }
+
+  @Override
+  public Categoria update(Categoria categoria) {
+    this.find(categoria.getId());
     return repository.save(categoria);
   }
 }

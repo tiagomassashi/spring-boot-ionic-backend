@@ -18,7 +18,7 @@ public class PedidoServiceImpl implements PedidoService {
   }
 
   @Override
-  public Pedido buscar(Integer id) {
+  public Pedido find(Integer id) {
     return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
         "Objeto não encontrado ID: " + id + ", Tipo: " + Pedido.class.getName()));
   }

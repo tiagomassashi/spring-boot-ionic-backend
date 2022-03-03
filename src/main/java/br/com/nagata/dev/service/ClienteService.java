@@ -4,5 +4,5 @@ import br.com.nagata.dev.model.Cliente;
 
 public interface ClienteService {
 
-  Cliente buscar(Integer id);
+  Cliente find(Integer id);
 }

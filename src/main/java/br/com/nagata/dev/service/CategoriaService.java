@@ -4,7 +4,9 @@ import br.com.nagata.dev.model.Categoria;
 
 public interface CategoriaService {
 
-  Categoria buscar(Integer id);
+  Categoria find(Integer id);
 
   Categoria insert(Categoria categoria);
+
+  Categoria update(Categoria categoria);
 }
