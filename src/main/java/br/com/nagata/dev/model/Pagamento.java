@@ -8,6 +8,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import br.com.nagata.dev.model.enums.EstadoPagamento;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,7 @@ public abstract class Pagamento implements Serializable {
   private Integer id;
   private EstadoPagamento estado;
 
+  @JsonBackReference
   @OneToOne
   @JoinColumn(name = "pedido_id")
   @MapsId
