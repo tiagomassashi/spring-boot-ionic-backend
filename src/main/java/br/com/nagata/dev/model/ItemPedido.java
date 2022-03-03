@@ -1,19 +1,18 @@
 package br.com.nagata.dev.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.nagata.dev.model.pk.ItemPedidoPK;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -24,6 +23,7 @@ public class ItemPedido implements Serializable {
   @JsonIgnore
   @EmbeddedId
   private ItemPedidoPK id = new ItemPedidoPK();
+
   private Double desconto;
   private Integer quantidade;
   private Double preco;
@@ -35,5 +35,22 @@ public class ItemPedido implements Serializable {
 
   public Produto getProduto() {
     return id.getProduto();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ItemPedido other = (ItemPedido) obj;
+    return Objects.equals(id, other.id);
   }
 }
