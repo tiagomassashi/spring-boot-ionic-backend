@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import br.com.nagata.dev.model.dto.CategoriaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,11 @@ public class Categoria implements Serializable {
 
   @ManyToMany(mappedBy = "categorias")
   private List<Produto> produtos = new ArrayList<>();
+
+  public Categoria(CategoriaDTO dto) {
+    this.id = dto.getId();
+    this.nome = dto.getNome();
+  }
 
   @Override
   public int hashCode() {

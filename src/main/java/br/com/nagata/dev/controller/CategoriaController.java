@@ -3,6 +3,7 @@ package br.com.nagata.dev.controller;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -37,17 +38,17 @@ public class CategoriaController {
   }
 
   @PostMapping
-  public ResponseEntity<Void> insert(@RequestBody Categoria categoria) {
-    categoria = service.insert(categoria);
+  public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDto) {
+    Categoria categoria = service.insert(new Categoria(categoriaDto));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(categoria.getId()).toUri();
     return ResponseEntity.created(uri).build();
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Void> update(@RequestBody Categoria categoria, @PathVariable Integer id) {
-    categoria.setId(id);
-    categoria = service.update(categoria);
+  public ResponseEntity<Void> update(@RequestBody CategoriaDTO categoriaDto, @PathVariable Integer id) {
+    categoriaDto.setId(id);
+    service.update(new Categoria(categoriaDto));
     return ResponseEntity.noContent().build();
   }
 
