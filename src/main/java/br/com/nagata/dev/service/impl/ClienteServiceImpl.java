@@ -89,7 +89,7 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   public Cliente fromDTO(ClienteNewDTO dto) {
-    Cliente cliente = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpgOuCnpj(),
+    Cliente cliente = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpfOuCnpj(),
         dto.getTipo(), null, null, null);
 
     Cidade cidade = cidadeRepository.findById(dto.getCidadeId()).orElseThrow(
