@@ -1,6 +1,7 @@
 package br.com.nagata.dev.service.impl;
 
 import java.util.Date;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.nagata.dev.exception.ObjectNotFoundException;
@@ -11,6 +12,7 @@ import br.com.nagata.dev.repository.ItemPedidoRepository;
 import br.com.nagata.dev.repository.PagamentoRepository;
 import br.com.nagata.dev.repository.PedidoRepository;
 import br.com.nagata.dev.service.BoletoService;
+import br.com.nagata.dev.service.ClienteService;
 import br.com.nagata.dev.service.PedidoService;
 import br.com.nagata.dev.service.ProdutoService;
 
@@ -22,16 +24,18 @@ public class PedidoServiceImpl implements PedidoService {
   private PagamentoRepository pagamentoRepository;
   private ProdutoService produtoService;
   private ItemPedidoRepository itemPedidoRepository;
+  private ClienteService clienteService;
 
   @Autowired
   public PedidoServiceImpl(PedidoRepository repository, BoletoService boletoService,
       PagamentoRepository pagamentoRepository, ProdutoService produtoService,
-      ItemPedidoRepository itemPedidoRepository) {
+      ItemPedidoRepository itemPedidoRepository, ClienteService clienteService) {
     this.repository = repository;
     this.boletoService = boletoService;
     this.pagamentoRepository = pagamentoRepository;
     this.produtoService = produtoService;
     this.itemPedidoRepository = itemPedidoRepository;
+    this.clienteService = clienteService;
   }
 
   @Override
@@ -40,10 +44,12 @@ public class PedidoServiceImpl implements PedidoService {
         "Objeto não encontrado ID: " + id + ", Tipo: " + Pedido.class.getName()));
   }
 
+  @Transactional
   @Override
   public Pedido insert(Pedido pedido) {
     pedido.setId(null);
     pedido.setInstante(new Date());
+    pedido.setCliente(clienteService.find(pedido.getCliente().getId()));
     pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);
     pedido.getPagamento().setPedido(pedido);
 
@@ -57,11 +63,14 @@ public class PedidoServiceImpl implements PedidoService {
 
     newPedido.getItens().stream().forEach(item -> {
       item.setDesconto(0.0);
-      item.setPreco(produtoService.find(item.getProduto().getId()).getPreco());
+      item.setProduto(produtoService.find(item.getProduto().getId()));
+      item.setPreco(item.getProduto().getPreco());
       item.setPedido(newPedido);
     });
 
     itemPedidoRepository.saveAll(newPedido.getItens());
+
+    System.out.println(newPedido);
 
     return newPedido;
   }
