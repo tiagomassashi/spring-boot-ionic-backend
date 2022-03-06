@@ -74,7 +74,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     itemPedidoRepository.saveAll(newPedido.getItens());
 
-    emailService.sendOrderConfirmationEmail(newPedido);
+    emailService.sendOrderConfirmationHtmlEmail(newPedido);
 
     return newPedido;
   }
