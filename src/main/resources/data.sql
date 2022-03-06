@@ -41,7 +41,7 @@ INSERT INTO cidade VALUES (1, 'Uberlândia', 1)
 INSERT INTO cidade VALUES (2, 'São Paulo', 2)
 INSERT INTO cidade VALUES (3, 'Campinas', 2)
 
-INSERT INTO cliente VALUES (1, '36378912377', 'maria@gmail.com', 'Maria Silva', 1)
+INSERT INTO cliente VALUES (1, '36378912377', 'maria@gmail.com', 'Maria Silva', '$2a$10$G9w3uh3o8sQXVjbGlRFxruOGyNfyU36qJyXXoaRcPNDZJuHlwaQNC', 1)
 
 INSERT INTO telefone VALUES (1, '27363323')
 INSERT INTO telefone VALUES (1, '93838393')

@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import br.com.nagata.dev.exception.DataIntegrityException;
@@ -29,13 +30,15 @@ public class ClienteServiceImpl implements ClienteService {
   private ClienteRepository repository;
   private CidadeRepository cidadeRepository;
   private EnderecoRepository enderecoRepository;
+  private BCryptPasswordEncoder passwordEncoder;
 
   @Autowired
   public ClienteServiceImpl(ClienteRepository repository, CidadeRepository cidadeRepository,
-      EnderecoRepository enderecoRepository) {
+      EnderecoRepository enderecoRepository, BCryptPasswordEncoder passwordEncoder) {
     this.repository = repository;
     this.cidadeRepository = cidadeRepository;
     this.enderecoRepository = enderecoRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
@@ -90,7 +93,7 @@ public class ClienteServiceImpl implements ClienteService {
   @Override
   public Cliente fromDTO(ClienteNewDTO dto) {
     Cliente cliente = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpfOuCnpj(),
-        dto.getTipo(), null, null, null);
+        dto.getTipo(), passwordEncoder.encode(dto.getSenha()), null, null, null);
 
     Cidade cidade = cidadeRepository.findById(dto.getCidadeId()).orElseThrow(
         () -> new ObjectNotFoundException("Cidade não encontrada ID: " + dto.getCidadeId()));
