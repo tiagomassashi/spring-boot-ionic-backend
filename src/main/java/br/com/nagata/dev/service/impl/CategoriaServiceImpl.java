@@ -36,8 +36,9 @@ public class CategoriaServiceImpl implements CategoriaService {
   }
 
   @Override
-  public Categoria update(Categoria categoria) {
-    this.find(categoria.getId());
+  public Categoria update(Categoria newCategoria) {
+    Categoria categoria = this.find(newCategoria.getId());
+    updateData(categoria, newCategoria);
     return repository.save(categoria);
   }
 
@@ -61,5 +62,9 @@ public class CategoriaServiceImpl implements CategoriaService {
   public Page<Categoria> findPage(Integer page, Integer size, String orderBy, String direction) {
     PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction), orderBy);
     return repository.findAll(pageRequest);
+  }
+
+  private void updateData(Categoria categoria, Categoria newCategoria) {
+    categoria.setNome(newCategoria.getNome());
   }
 }
