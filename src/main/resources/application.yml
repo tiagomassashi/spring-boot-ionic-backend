@@ -12,5 +12,22 @@ spring.jpa:
       format_sql: false
 
 # Configuracao de mail
-default.sender: tiago.nagata@outlook.com
-default.recipient: tiago.nagata@outlook.com
+default:
+  sender: teste@outlook.com
+  recipient: teste@outlook.com
+
+spring.mail:
+  host: smtp.gmail.com
+  username: #email
+  password: #senha
+  properties:
+    mail:
+      smtp:
+        auth: true
+        socketFactory:
+          port: 465
+          class: javax.net.ssl.SSLSocketFactory
+          fallback: false
+        starttls:
+          enable: true
+        ssl: true
