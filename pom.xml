@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.nagata.dev</groupId>
 	<artifactId>spring-boot-ionic-backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>spring-boot-ionic-backend</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
