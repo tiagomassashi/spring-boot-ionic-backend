@@ -2,11 +2,15 @@
 spring.datasource:
   url: mysql://b9b1fc86ac6b8e:67551580@us-cdbr-east-05.cleardb.net/heroku_577b1b5d19320bb?reconnect=true
     
-# configuracao do jpa
+# Configuracao do jpa
 spring.jpa:
   hibernate:
     ddl-auto: none
   show-sql: false
   properties:
     hibernate:
-      format_sql: false 
+      format_sql: false
+
+# Configuracao de mail
+default.sender: tiago.nagata@outlook.com
+default.recipient: tiago.nagata@outlook.com

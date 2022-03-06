@@ -13,6 +13,7 @@ import br.com.nagata.dev.repository.PagamentoRepository;
 import br.com.nagata.dev.repository.PedidoRepository;
 import br.com.nagata.dev.service.BoletoService;
 import br.com.nagata.dev.service.ClienteService;
+import br.com.nagata.dev.service.EmailService;
 import br.com.nagata.dev.service.PedidoService;
 import br.com.nagata.dev.service.ProdutoService;
 
@@ -25,17 +26,20 @@ public class PedidoServiceImpl implements PedidoService {
   private ProdutoService produtoService;
   private ItemPedidoRepository itemPedidoRepository;
   private ClienteService clienteService;
+  private EmailService emailService;
 
   @Autowired
   public PedidoServiceImpl(PedidoRepository repository, BoletoService boletoService,
       PagamentoRepository pagamentoRepository, ProdutoService produtoService,
-      ItemPedidoRepository itemPedidoRepository, ClienteService clienteService) {
+      ItemPedidoRepository itemPedidoRepository, ClienteService clienteService,
+      EmailService emailService) {
     this.repository = repository;
     this.boletoService = boletoService;
     this.pagamentoRepository = pagamentoRepository;
     this.produtoService = produtoService;
     this.itemPedidoRepository = itemPedidoRepository;
     this.clienteService = clienteService;
+    this.emailService = emailService;
   }
 
   @Override
@@ -70,7 +74,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     itemPedidoRepository.saveAll(newPedido.getItens());
 
-    System.out.println(newPedido);
+    emailService.sendOrderConfirmationEmail(newPedido);
 
     return newPedido;
   }

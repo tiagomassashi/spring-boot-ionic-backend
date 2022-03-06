@@ -6,7 +6,7 @@ spring.datasource:
   driver-class-name: com.mysql.cj.jdbc.Driver
   initialization-mode: never
     
-# configuracao do jpa
+# Configuracao do jpa
 spring.jpa:
   hibernate:
     ddl-auto: none
