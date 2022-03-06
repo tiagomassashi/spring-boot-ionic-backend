@@ -31,3 +31,8 @@ spring.mail:
         starttls:
           enable: true
         ssl: true
+
+# Configuracao de seguranca
+jwt:
+  secret: SequenciaDeCaracteresParaAssinarToken
+  expiration: 60000
