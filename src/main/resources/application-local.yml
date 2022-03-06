@@ -11,12 +11,12 @@ spring.datasource:
   username: sa
   password:
   driver-class-name: org.h2.Driver
-  initialization-mode: never
+  initialization-mode: always
     
 # configuracao do jpa
 spring.jpa:
-  show-sql: false
+  show-sql: true
   properties:
     hibernate:
       format_sql: true 
-  defer-datasource-initialization: false
+  defer-datasource-initialization: true
