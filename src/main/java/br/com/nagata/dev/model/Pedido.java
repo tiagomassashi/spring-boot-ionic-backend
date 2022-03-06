@@ -50,6 +50,12 @@ public class Pedido implements Serializable {
   @OneToMany(mappedBy = "id.pedido")
   private Set<ItemPedido> itens = new HashSet<>();
 
+  public double getValorTotal() {
+    return itens.stream()
+        .map(item -> item.getSubTotal())
+        .reduce(0.0, Double::sum);
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(id);
