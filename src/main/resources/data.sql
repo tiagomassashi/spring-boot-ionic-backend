@@ -42,12 +42,20 @@ INSERT INTO cidade VALUES (2, 'São Paulo', 2)
 INSERT INTO cidade VALUES (3, 'Campinas', 2)
 
 INSERT INTO cliente VALUES (1, '36378912377', 'maria@gmail.com', 'Maria Silva', '$2a$10$G9w3uh3o8sQXVjbGlRFxruOGyNfyU36qJyXXoaRcPNDZJuHlwaQNC', 1)
+INSERT INTO cliente VALUES (2, '53760652000', 'ana@gmail.com', 'Ana Costa', '$2a$10$G9w3uh3o8sQXVjbGlRFxruOGyNfyU36qJyXXoaRcPNDZJuHlwaQNC', 1)
+
+INSERT INTO perfis VALUES (1, 2)
+INSERT INTO perfis VALUES (2, 1)
+INSERT INTO perfis VALUES (2, 2)
 
 INSERT INTO telefone VALUES (1, '27363323')
 INSERT INTO telefone VALUES (1, '93838393')
+INSERT INTO telefone VALUES (2, '31231231')
+INSERT INTO telefone VALUES (2, '44353455')
 
 INSERT INTO endereco VALUES (1, 'Rua Flores', '38220834', 'Apto 303', 'Jardim', '300', 1, 1)
 INSERT INTO endereco VALUES (2, 'Avenida Matos', '38777012', 'Sala 800', 'Centro', '105', 2, 1)
+INSERT INTO endereco VALUES (3, 'Avenida Floriando', '43227012', null, 'Centro', '2106', 2, 2)
 
 INSERT INTO pedido VALUES (1, '2022-09-30T10:32:00.000000', 1, 1)
 INSERT INTO pedido VALUES (2, '2022-09-10T19:35:00.000000', 1, 2)

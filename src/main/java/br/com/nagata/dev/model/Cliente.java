@@ -11,12 +11,14 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.nagata.dev.model.dto.ClienteDTO;
+import br.com.nagata.dev.model.enums.Perfil;
 import br.com.nagata.dev.model.enums.TipoCliente;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,6 +54,10 @@ public class Cliente implements Serializable {
   @CollectionTable(name = "TELEFONE")
   private Set<String> telefones = new HashSet<>();
 
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "PERFIS")
+  private Set<Perfil> perfis = new HashSet<>();
+
   @JsonIgnore
   @OneToMany(mappedBy = "cliente")
   private List<Pedido> pedidos = new ArrayList<>();
@@ -60,6 +66,10 @@ public class Cliente implements Serializable {
     this.id = dto.getId();
     this.nome = dto.getNome();
     this.email = dto.getEmail();
+  }
+
+  public void addPerfil(Perfil perfil) {
+    perfis.add(perfil);
   }
 
   @Override

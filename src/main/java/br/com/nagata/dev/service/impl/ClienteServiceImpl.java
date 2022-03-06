@@ -19,6 +19,7 @@ import br.com.nagata.dev.model.Cidade;
 import br.com.nagata.dev.model.Cliente;
 import br.com.nagata.dev.model.Endereco;
 import br.com.nagata.dev.model.dto.ClienteNewDTO;
+import br.com.nagata.dev.model.enums.Perfil;
 import br.com.nagata.dev.repository.CidadeRepository;
 import br.com.nagata.dev.repository.ClienteRepository;
 import br.com.nagata.dev.repository.EnderecoRepository;
@@ -92,8 +93,11 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   public Cliente fromDTO(ClienteNewDTO dto) {
+    Set<Perfil> perfis = new HashSet<>();
+    perfis.add(Perfil.CLIENTE);
+
     Cliente cliente = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpfOuCnpj(),
-        dto.getTipo(), passwordEncoder.encode(dto.getSenha()), null, null, null);
+        dto.getTipo(), passwordEncoder.encode(dto.getSenha()), null, null, perfis, null);
 
     Cidade cidade = cidadeRepository.findById(dto.getCidadeId()).orElseThrow(
         () -> new ObjectNotFoundException("Cidade não encontrada ID: " + dto.getCidadeId()));
