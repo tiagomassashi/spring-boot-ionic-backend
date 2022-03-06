@@ -1,22 +1,18 @@
-# Propriedades da aplicacao Spring Boot
-spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      
 # Configuracao do datasource
 spring.datasource:
-  url: jdbc:h2:mem:testdb
-  username: sa
-  password:
-  driver-class-name: org.h2.Driver
+  url: jdbc:mysql://localhost:3306/curso_spring
+  username: root
+  password: root
+  driver-class-name: com.mysql.cj.jdbc.Driver
   initialization-mode: never
     
 # configuracao do jpa
 spring.jpa:
+  hibernate:
+    ddl-auto: none
   show-sql: false
   properties:
     hibernate:
       format_sql: true 
   defer-datasource-initialization: false
+  database-platform: org.hibernate.dialect.MySQL5Dialect
