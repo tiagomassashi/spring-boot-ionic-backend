@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import br.com.nagata.dev.model.dto.ClienteDTO;
 import br.com.nagata.dev.model.enums.TipoCliente;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,6 +48,12 @@ public class Cliente implements Serializable {
   @JsonIgnore
   @OneToMany(mappedBy = "cliente")
   private List<Pedido> pedidos = new ArrayList<>();
+
+  public Cliente(ClienteDTO dto) {
+    this.id = dto.getId();
+    this.nome = dto.getNome();
+    this.email = dto.getEmail();
+  }
 
   @Override
   public int hashCode() {
