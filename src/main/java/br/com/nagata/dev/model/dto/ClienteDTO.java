@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import br.com.nagata.dev.model.Cliente;
+import br.com.nagata.dev.service.validation.ClienteUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ClienteUpdate
 public class ClienteDTO implements Serializable {
 
   private static final long serialVersionUID = 1L;
