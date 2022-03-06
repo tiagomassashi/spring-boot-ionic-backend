@@ -4,12 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import br.com.nagata.dev.exception.FieldMessage;
 import br.com.nagata.dev.model.dto.ClienteNewDTO;
 import br.com.nagata.dev.model.enums.TipoCliente;
+import br.com.nagata.dev.repository.ClienteRepository;
 import br.com.nagata.dev.service.validation.utils.BR;
 
 public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+
+  private ClienteRepository repository;
+
+  @Autowired
+  public ClienteInsertValidator(ClienteRepository repository) {
+    this.repository = repository;
+  }
 
   @Override
   public boolean isValid(ClienteNewDTO value, ConstraintValidatorContext context) {
@@ -23,6 +32,10 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
       list.add(new FieldMessage("cpfOuCnpj", "CNPJ inválido"));
     }
 
+    if (repository.findByEmail(value.getEmail()).isPresent()) {
+      list.add(new FieldMessage("email", "Email já existente"));
+    }
+
     list.stream().forEach(fieldMessage -> {
       context.disableDefaultConstraintViolation();
       context.buildConstraintViolationWithTemplate(fieldMessage.getMessage())
@@ -31,5 +44,4 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 
     return list.isEmpty();
   }
-
 }
