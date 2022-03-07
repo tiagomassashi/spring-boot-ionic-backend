@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import br.com.nagata.dev.security.JWTAuthenticationFilter;
+import br.com.nagata.dev.security.JWTAuthorizationFilter;
 import br.com.nagata.dev.security.JWTUtil;
 import br.com.nagata.dev.service.impl.UserDetailsServiceImpl;
 
@@ -25,14 +26,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private static final String PROFILE_LOCAL = "local";
   private static final String[] PUBLIC_MATCHERS = {"/h2-console/**"};
-  private static final String[] PUBLIC_MATCHERS_GET = {"/produtos/**", "/categorias/**", "/clientes/**"};
+  private static final String[] PUBLIC_MATCHERS_GET =
+      {"/produtos/**", "/categorias/**", "/clientes/**"};
 
   private Environment env;
   private UserDetailsServiceImpl userDetailsService;
   private JWTUtil jwtUtil;
 
   @Autowired
-  public SecurityConfig(Environment env, UserDetailsServiceImpl userDetailsService, JWTUtil jwtUtil) {
+  public SecurityConfig(Environment env, UserDetailsServiceImpl userDetailsService,
+      JWTUtil jwtUtil) {
     this.env = env;
     this.userDetailsService = userDetailsService;
     this.jwtUtil = jwtUtil;
@@ -49,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .antMatchers(PUBLIC_MATCHERS).permitAll()
       .anyRequest().authenticated();
     http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+    http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 
