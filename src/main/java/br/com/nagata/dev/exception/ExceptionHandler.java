@@ -38,4 +38,13 @@ public class ExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
+
+  @org.springframework.web.bind.annotation.ExceptionHandler(AuthorizationException.class)
+  public ResponseEntity<StandardError> authorization(AuthorizationException exception,
+      HttpServletRequest request) {
+    StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), exception.getMessage(),
+        System.currentTimeMillis());
+
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+  }
 }

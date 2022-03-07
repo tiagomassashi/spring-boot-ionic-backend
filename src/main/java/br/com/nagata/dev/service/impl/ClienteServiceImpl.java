@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import br.com.nagata.dev.exception.AuthorizationException;
 import br.com.nagata.dev.exception.DataIntegrityException;
 import br.com.nagata.dev.exception.ObjectNotFoundException;
 import br.com.nagata.dev.model.Cidade;
@@ -23,6 +24,7 @@ import br.com.nagata.dev.model.enums.Perfil;
 import br.com.nagata.dev.repository.CidadeRepository;
 import br.com.nagata.dev.repository.ClienteRepository;
 import br.com.nagata.dev.repository.EnderecoRepository;
+import br.com.nagata.dev.security.UserSS;
 import br.com.nagata.dev.service.ClienteService;
 
 @Service
@@ -44,6 +46,12 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   public Cliente find(Integer id) {
+    UserSS user = UserServiceImpl.authenticated();
+
+    if (user != null && !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+      throw new AuthorizationException("Acesso negado");
+    }
+
     return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
         "Objeto não encontrado ID: " + id + ", Tipo: " + Cliente.class.getName()));
   }
