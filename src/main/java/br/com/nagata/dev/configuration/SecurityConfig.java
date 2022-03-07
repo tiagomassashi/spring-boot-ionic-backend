@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,20 +23,20 @@ import br.com.nagata.dev.service.impl.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private static final String PROFILE_LOCAL = "local";
   private static final String[] PUBLIC_MATCHERS = {"/h2-console/**"};
-  private static final String[] PUBLIC_MATCHERS_GET =
-      {"/produtos/**", "/categorias/**", "/clientes/**"};
+  private static final String[] PUBLIC_MATCHERS_GET = {"/produtos/**", "/categorias/**"};
+  private static final String[] PUBLIC_MATCHERS_POST = {"/clientes/**"};
 
   private Environment env;
   private UserDetailsServiceImpl userDetailsService;
   private JWTUtil jwtUtil;
 
   @Autowired
-  public SecurityConfig(Environment env, UserDetailsServiceImpl userDetailsService,
-      JWTUtil jwtUtil) {
+  public SecurityConfig(Environment env, UserDetailsServiceImpl userDetailsService, JWTUtil jwtUtil) {
     this.env = env;
     this.userDetailsService = userDetailsService;
     this.jwtUtil = jwtUtil;
@@ -48,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     http.cors().and().csrf().disable();
     http.authorizeRequests()
+      .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
       .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
       .antMatchers(PUBLIC_MATCHERS).permitAll()
       .anyRequest().authenticated();
