@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import br.com.nagata.dev.model.Cliente;
 import br.com.nagata.dev.model.Pedido;
 import br.com.nagata.dev.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,26 @@ public abstract class AbstractEmailServiceImpl implements EmailService {
     helper.setSubject("Pedido confirmado! Código: " + pedido.getId());
     helper.setSentDate(new Date(System.currentTimeMillis()));
     helper.setText(htmlFromTemplatePedido(pedido), true);
+    return message;
+  }
+
+  @Override
+  public void sendNewPasswordEmail(Cliente cliente, String newPass) {
+    try {
+      SimpleMailMessage message = prepareNewPasswordEmail(cliente, newPass);
+      sendEmail(message);
+    } catch (RuntimeException e) {
+      log.error("Erro ao enviar email com nova senha");
+    }
+  }
+
+  protected SimpleMailMessage prepareNewPasswordEmail(Cliente cliente, String newPass) {
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setTo(cliente.getEmail());
+    message.setFrom(sender);
+    message.setSubject("Solicitação de nova senha");
+    message.setSentDate(new Date(System.currentTimeMillis()));
+    message.setText("Nova senha: " + newPass);
     return message;
   }
 }
