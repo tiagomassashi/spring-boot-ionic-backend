@@ -35,4 +35,12 @@ spring.mail:
 # Configuracao de seguranca
 jwt:
   secret: SequenciaDeCaracteresParaAssinarToken
-  expiration: 60000
+  expiration: 86400000
+
+# Configuracao AWS  
+aws:
+  access_key_id:
+  secret_access_key:
+s3:
+  bucket: curso-spring-ionic
+  region: sa-east-1
