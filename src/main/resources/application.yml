@@ -44,3 +44,5 @@ aws:
 s3:
   bucket: nagata-spring-ionic
   region: sa-east-1
+img:
+  prefix.client.profile: cp

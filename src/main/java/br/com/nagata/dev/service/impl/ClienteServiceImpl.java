@@ -13,8 +13,10 @@ import br.com.nagata.dev.repository.ClienteRepository;
 import br.com.nagata.dev.repository.EnderecoRepository;
 import br.com.nagata.dev.security.UserSS;
 import br.com.nagata.dev.service.ClienteService;
+import br.com.nagata.dev.service.ImageService;
 import br.com.nagata.dev.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +41,10 @@ public class ClienteServiceImpl implements ClienteService {
   private final EnderecoRepository enderecoRepository;
   private final BCryptPasswordEncoder passwordEncoder;
   private final S3Service s3Service;
+  private final ImageService imageService;
+
+  @Value("${img.prefix.client.profile}")
+  private String prefix;
 
   @Autowired
   public ClienteServiceImpl(
@@ -45,12 +52,14 @@ public class ClienteServiceImpl implements ClienteService {
       CidadeRepository cidadeRepository,
       EnderecoRepository enderecoRepository,
       BCryptPasswordEncoder passwordEncoder,
-      S3Service s3Service) {
+      S3Service s3Service,
+      ImageService imageService) {
     this.repository = repository;
     this.cidadeRepository = cidadeRepository;
     this.enderecoRepository = enderecoRepository;
     this.passwordEncoder = passwordEncoder;
     this.s3Service = s3Service;
+    this.imageService = imageService;
   }
 
   @Override
@@ -128,7 +137,6 @@ public class ClienteServiceImpl implements ClienteService {
             null,
             null,
             perfis,
-            null,
             null);
 
     Cidade cidade =
@@ -175,22 +183,9 @@ public class ClienteServiceImpl implements ClienteService {
       throw new AuthorizationException("Acesso negado");
     }
 
-    URI uri = s3Service.uploadFile(multipartFile);
+    BufferedImage image = imageService.getJpgImageFromFile(multipartFile);
+    String fileName = prefix + user.getId() + ".jpg";
 
-    Cliente cliente =
-        repository
-            .findById(user.getId())
-            .orElseThrow(
-                () ->
-                    new ObjectNotFoundException(
-                        "Objeto não encontrado ID: "
-                            + user.getId()
-                            + ", Tipo: "
-                            + Cliente.class.getName()));
-
-    cliente.setImageUrl(uri.toString());
-    repository.save(cliente);
-
-    return uri;
+    return s3Service.uploadFile(imageService.getInputStream(image, "jpg"), fileName, "image");
   }
 }
