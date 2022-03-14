@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -129,6 +128,7 @@ public class ClienteServiceImpl implements ClienteService {
             null,
             null,
             perfis,
+            null,
             null);
 
     Cidade cidade =
@@ -169,6 +169,28 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   public URI uploadProfilePicture(MultipartFile multipartFile) {
-    return s3Service.uploadFile(multipartFile);
+    UserSS user = UserServiceImpl.authenticated();
+
+    if (user == null) {
+      throw new AuthorizationException("Acesso negado");
+    }
+
+    URI uri = s3Service.uploadFile(multipartFile);
+
+    Cliente cliente =
+        repository
+            .findById(user.getId())
+            .orElseThrow(
+                () ->
+                    new ObjectNotFoundException(
+                        "Objeto não encontrado ID: "
+                            + user.getId()
+                            + ", Tipo: "
+                            + Cliente.class.getName()));
+
+    cliente.setImageUrl(uri.toString());
+    repository.save(cliente);
+
+    return uri;
   }
 }
