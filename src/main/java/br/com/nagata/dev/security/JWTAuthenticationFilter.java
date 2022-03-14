@@ -19,9 +19,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import br.com.nagata.dev.model.dto.CredenciaisDTO;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-  private AuthenticationManager authenticationManager;
 
-  private JWTUtil jwtUtil;
+  private final AuthenticationManager authenticationManager;
+  private final JWTUtil jwtUtil;
 
   public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
     setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler());
@@ -37,30 +37,32 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       CredenciaisDTO creds =
           new ObjectMapper().readValue(req.getInputStream(), CredenciaisDTO.class);
 
-      UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-          creds.getEmail(), creds.getSenha(), new ArrayList<>());
+      UsernamePasswordAuthenticationToken authToken =
+          new UsernamePasswordAuthenticationToken(
+              creds.getEmail(), creds.getSenha(), new ArrayList<>());
 
-      Authentication auth = authenticationManager.authenticate(authToken);
-      return auth;
+      return authenticationManager.authenticate(authToken);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
   @Override
-  protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
-      FilterChain chain, Authentication auth) throws IOException, ServletException {
+  protected void successfulAuthentication(
+      HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth)
+      throws IOException, ServletException {
 
     String username = ((UserSS) auth.getPrincipal()).getUsername();
     String token = jwtUtil.generateToken(username);
     res.addHeader("Authorization", "Bearer " + token);
   }
 
-  private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
+  private static class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-        AuthenticationException exception) throws IOException, ServletException {
+    public void onAuthenticationFailure(
+        HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
+        throws IOException, ServletException {
       response.setStatus(401);
       response.setContentType("application/json");
       response.getWriter().append(json());
@@ -73,7 +75,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       json.put("error", "Não autorizado");
       json.put("message", "Email ou senha inválidos");
       json.put("path", "/login");
-      
+
       return json.toString();
     }
   }

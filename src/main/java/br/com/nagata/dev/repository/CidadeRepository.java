@@ -5,6 +5,4 @@ import org.springframework.stereotype.Repository;
 import br.com.nagata.dev.model.Cidade;
 
 @Repository
-public interface CidadeRepository extends JpaRepository<Cidade, Integer> {
-
-}
+public interface CidadeRepository extends JpaRepository<Cidade, Integer> {}

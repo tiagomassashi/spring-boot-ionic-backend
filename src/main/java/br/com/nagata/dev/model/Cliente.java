@@ -37,15 +37,16 @@ public class Cliente implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
   private String nome;
 
   @Column(unique = true)
   private String email;
+
   private String cpgOuCnpj;
   private TipoCliente tipo;
 
-  @JsonIgnore
-  private String senha;
+  @JsonIgnore private String senha;
 
   @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
   private List<Endereco> enderecos = new ArrayList<>();
@@ -79,12 +80,9 @@ public class Cliente implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Cliente other = (Cliente) obj;
     return Objects.equals(id, other.id);
   }

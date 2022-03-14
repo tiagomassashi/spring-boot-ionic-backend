@@ -12,9 +12,12 @@ import br.com.nagata.dev.model.Produto;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
-//  @Query("SELECT DISTINCT prod FROM Produto prod INNER JOIN prod.categorias cate WHERE prod.nome LIKE %:nome% AND cate IN :categorias")
-//  Page<Produto> search(@Param("nome") String nome, @Param("categorias") List<Categoria> categorias, Pageable pageRequest);
-  
+  //  @Query("SELECT DISTINCT prod FROM Produto prod INNER JOIN prod.categorias cate WHERE prod.nome
+  // LIKE %:nome% AND cate IN :categorias")
+  //  Page<Produto> search(@Param("nome") String nome, @Param("categorias") List<Categoria>
+  // categorias, Pageable pageRequest);
+
   @Transactional(readOnly = true)
-  Page<Produto> findDistinctByNomeContainingAndCategoriasIn(String nome, List<Categoria> categorias, Pageable pageRequest);
+  Page<Produto> findDistinctByNomeContainingAndCategoriasIn(
+      String nome, List<Categoria> categorias, Pageable pageRequest);
 }

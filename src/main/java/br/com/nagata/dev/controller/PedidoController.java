@@ -20,7 +20,7 @@ import br.com.nagata.dev.service.PedidoService;
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
 
-  private PedidoService service;
+  private final PedidoService service;
 
   @Autowired
   public PedidoController(PedidoService service) {
@@ -35,8 +35,11 @@ public class PedidoController {
   @PostMapping
   public ResponseEntity<Void> insert(@Valid @RequestBody Pedido pedido) {
     pedido = service.insert(pedido);
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(pedido.getId()).toUri();
+    URI uri =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(pedido.getId())
+            .toUri();
     return ResponseEntity.created(uri).build();
   }
 

@@ -5,6 +5,4 @@ import org.springframework.stereotype.Repository;
 import br.com.nagata.dev.model.ItemPedido;
 
 @Repository
-public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Integer> {
-
-}
+public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Integer> {}

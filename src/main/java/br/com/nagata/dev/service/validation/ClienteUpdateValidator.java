@@ -16,8 +16,8 @@ import br.com.nagata.dev.repository.ClienteRepository;
 
 public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDTO> {
 
-  private HttpServletRequest request;
-  private ClienteRepository repository;
+  private final HttpServletRequest request;
+  private final ClienteRepository repository;
 
   @Autowired
   public ClienteUpdateValidator(HttpServletRequest request, ClienteRepository repository) {
@@ -41,11 +41,14 @@ public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate
       list.add(new FieldMessage("email", "Email já existente"));
     }
 
-    list.stream().forEach(fieldMessage -> {
-      context.disableDefaultConstraintViolation();
-      context.buildConstraintViolationWithTemplate(fieldMessage.getMessage())
-          .addPropertyNode(fieldMessage.getFieldName()).addConstraintViolation();
-    });
+    list.forEach(
+        fieldMessage -> {
+          context.disableDefaultConstraintViolation();
+          context
+              .buildConstraintViolationWithTemplate(fieldMessage.getMessage())
+              .addPropertyNode(fieldMessage.getFieldName())
+              .addConstraintViolation();
+        });
 
     return list.isEmpty();
   }

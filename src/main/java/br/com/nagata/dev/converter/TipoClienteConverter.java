@@ -21,7 +21,9 @@ public class TipoClienteConverter implements AttributeConverter<TipoCliente, Int
     if (codigo == null) {
       return null;
     }
-    return Stream.of(TipoCliente.values()).filter(c -> c.getCodigo().equals(codigo)).findFirst()
+    return Stream.of(TipoCliente.values())
+        .filter(c -> c.getCodigo().equals(codigo))
+        .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }
 }

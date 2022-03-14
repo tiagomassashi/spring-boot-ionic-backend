@@ -21,7 +21,9 @@ public class PerfilConverter implements AttributeConverter<Perfil, Integer> {
     if (codigo == null) {
       return null;
     }
-    return Stream.of(Perfil.values()).filter(c -> c.getCodigo().equals(codigo)).findFirst()
+    return Stream.of(Perfil.values())
+        .filter(c -> c.getCodigo().equals(codigo))
+        .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }
 }

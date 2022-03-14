@@ -21,7 +21,9 @@ public class EstadoPagamentoConverter implements AttributeConverter<EstadoPagame
     if (codigo == null) {
       return null;
     }
-    return Stream.of(EstadoPagamento.values()).filter(c -> c.getCodigo().equals(codigo)).findFirst()
+    return Stream.of(EstadoPagamento.values())
+        .filter(c -> c.getCodigo().equals(codigo))
+        .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }
 }

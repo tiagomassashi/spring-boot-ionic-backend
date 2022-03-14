@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SmtpEmailServiceImpl extends AbstractEmailServiceImpl {
 
-  private MailSender mailSender;
-  private JavaMailSender javaMailSender;
+  private final MailSender mailSender;
+  private final JavaMailSender javaMailSender;
 
   @Autowired
   public SmtpEmailServiceImpl(MailSender mailSender, JavaMailSender javaMailSender) {

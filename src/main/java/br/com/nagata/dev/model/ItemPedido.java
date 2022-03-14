@@ -22,9 +22,7 @@ public class ItemPedido implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @JsonIgnore
-  @EmbeddedId
-  private ItemPedidoPK id = new ItemPedidoPK();
+  @JsonIgnore @EmbeddedId private ItemPedidoPK id = new ItemPedidoPK();
 
   private Double desconto;
   private Integer quantidade;
@@ -58,12 +56,9 @@ public class ItemPedido implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     ItemPedido other = (ItemPedido) obj;
     return Objects.equals(id, other.id);
   }
@@ -71,15 +66,13 @@ public class ItemPedido implements Serializable {
   @Override
   public String toString() {
     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-    StringBuilder builder = new StringBuilder();
-    builder.append(getProduto().getNome());
-    builder.append(", Qtde: ");
-    builder.append(getQuantidade());
-    builder.append(", Preço unitário: ");
-    builder.append(nf.format(getPreco()));
-    builder.append(", Subtotal: ");
-    builder.append(nf.format(getSubTotal()));
-    builder.append("\n");
-    return builder.toString();
+    return getProduto().getNome()
+        + ", Qtde: "
+        + getQuantidade()
+        + ", Preço unitário: "
+        + nf.format(getPreco())
+        + ", Subtotal: "
+        + nf.format(getSubTotal())
+        + "\n";
   }
 }

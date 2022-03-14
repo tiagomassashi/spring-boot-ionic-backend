@@ -26,18 +26,22 @@ import br.com.nagata.dev.service.ProdutoService;
 @Service
 public class PedidoServiceImpl implements PedidoService {
 
-  private PedidoRepository repository;
-  private BoletoService boletoService;
-  private PagamentoRepository pagamentoRepository;
-  private ProdutoService produtoService;
-  private ItemPedidoRepository itemPedidoRepository;
-  private ClienteService clienteService;
-  private EmailService emailService;
+  private final PedidoRepository repository;
+  private final BoletoService boletoService;
+  private final PagamentoRepository pagamentoRepository;
+  private final ProdutoService produtoService;
+  private final ItemPedidoRepository itemPedidoRepository;
+  private final ClienteService clienteService;
+  private final EmailService emailService;
 
   @Autowired
-  public PedidoServiceImpl(PedidoRepository repository, BoletoService boletoService,
-      PagamentoRepository pagamentoRepository, ProdutoService produtoService,
-      ItemPedidoRepository itemPedidoRepository, ClienteService clienteService,
+  public PedidoServiceImpl(
+      PedidoRepository repository,
+      BoletoService boletoService,
+      PagamentoRepository pagamentoRepository,
+      ProdutoService produtoService,
+      ItemPedidoRepository itemPedidoRepository,
+      ClienteService clienteService,
       EmailService emailService) {
     this.repository = repository;
     this.boletoService = boletoService;
@@ -50,8 +54,12 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   public Pedido find(Integer id) {
-    return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
-        "Objeto não encontrado ID: " + id + ", Tipo: " + Pedido.class.getName()));
+    return repository
+        .findById(id)
+        .orElseThrow(
+            () ->
+                new ObjectNotFoundException(
+                    "Objeto não encontrado ID: " + id + ", Tipo: " + Pedido.class.getName()));
   }
 
   @Transactional
@@ -71,12 +79,15 @@ public class PedidoServiceImpl implements PedidoService {
     final Pedido newPedido = repository.save(pedido);
     pagamentoRepository.save(newPedido.getPagamento());
 
-    newPedido.getItens().stream().forEach(item -> {
-      item.setDesconto(0.0);
-      item.setProduto(produtoService.find(item.getProduto().getId()));
-      item.setPreco(item.getProduto().getPreco());
-      item.setPedido(newPedido);
-    });
+    newPedido
+        .getItens()
+        .forEach(
+            item -> {
+              item.setDesconto(0.0);
+              item.setProduto(produtoService.find(item.getProduto().getId()));
+              item.setPreco(item.getProduto().getPreco());
+              item.setPedido(newPedido);
+            });
 
     itemPedidoRepository.saveAll(newPedido.getItens());
 

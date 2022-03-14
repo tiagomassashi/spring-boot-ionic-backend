@@ -28,8 +28,7 @@ public abstract class Pagamento implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Id
-  private Integer id;
+  @Id private Integer id;
   private EstadoPagamento estado;
 
   @JsonIgnore
@@ -45,12 +44,9 @@ public abstract class Pagamento implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Pagamento other = (Pagamento) obj;
     return Objects.equals(id, other.id);
   }

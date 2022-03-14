@@ -12,7 +12,7 @@ import br.com.nagata.dev.security.UserSS;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private ClienteRepository repository;
+  private final ClienteRepository repository;
 
   @Autowired
   public UserDetailsServiceImpl(ClienteRepository repository) {

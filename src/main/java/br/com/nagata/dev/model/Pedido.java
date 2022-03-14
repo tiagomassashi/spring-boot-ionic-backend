@@ -54,9 +54,7 @@ public class Pedido implements Serializable {
   private Set<ItemPedido> itens = new HashSet<>();
 
   public double getValorTotal() {
-    return itens.stream()
-        .map(item -> item.getSubTotal())
-        .reduce(0.0, Double::sum);
+    return itens.stream().map(ItemPedido::getSubTotal).reduce(0.0, Double::sum);
   }
 
   @Override
@@ -66,12 +64,9 @@ public class Pedido implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Pedido other = (Pedido) obj;
     return Objects.equals(id, other.id);
   }

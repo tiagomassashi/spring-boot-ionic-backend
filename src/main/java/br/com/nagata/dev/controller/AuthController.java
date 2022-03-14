@@ -17,8 +17,8 @@ import br.com.nagata.dev.service.impl.UserServiceImpl;
 @RequestMapping(value = "/auth")
 public class AuthController {
 
-  private JWTUtil jwtUtil;
-  private AuthService service;
+  private final JWTUtil jwtUtil;
+  private final AuthService service;
 
   public AuthController(JWTUtil jwtUtil, AuthService service) {
     this.jwtUtil = jwtUtil;

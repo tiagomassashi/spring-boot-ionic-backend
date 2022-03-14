@@ -4,10 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum Perfil {
-  ADMIN(1, "ROLE_ADMIN"), CLIENTE(2, "ROLE_CLIENTE");
+  ADMIN(1, "ROLE_ADMIN"),
+  CLIENTE(2, "ROLE_CLIENTE");
 
-  private Integer codigo;
-  private String descricao;
+  private final Integer codigo;
+  private final String descricao;
 
   private Perfil(Integer codigo, String descricao) {
     this.codigo = codigo;

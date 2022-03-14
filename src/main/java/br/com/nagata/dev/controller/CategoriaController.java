@@ -26,7 +26,7 @@ import br.com.nagata.dev.service.CategoriaService;
 @RequestMapping(value = "/categorias")
 public class CategoriaController {
 
-  private CategoriaService service;
+  private final CategoriaService service;
 
   @Autowired
   public CategoriaController(CategoriaService service) {
@@ -42,14 +42,18 @@ public class CategoriaController {
   @PostMapping
   public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDto) {
     Categoria categoria = service.insert(new Categoria(categoriaDto));
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(categoria.getId()).toUri();
+    URI uri =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(categoria.getId())
+            .toUri();
     return ResponseEntity.created(uri).build();
   }
 
   @PreAuthorize("hasAnyRole('ADMIN')")
   @PutMapping("/{id}")
-  public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO categoriaDto, @PathVariable Integer id) {
+  public ResponseEntity<Void> update(
+      @Valid @RequestBody CategoriaDTO categoriaDto, @PathVariable Integer id) {
     categoriaDto.setId(id);
     service.update(new Categoria(categoriaDto));
     return ResponseEntity.noContent().build();

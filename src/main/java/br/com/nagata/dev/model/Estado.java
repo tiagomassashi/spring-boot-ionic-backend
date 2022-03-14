@@ -27,6 +27,7 @@ public class Estado implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
   private String nome;
 
   @JsonIgnore
@@ -40,12 +41,9 @@ public class Estado implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Estado other = (Estado) obj;
     return Objects.equals(id, other.id);
   }

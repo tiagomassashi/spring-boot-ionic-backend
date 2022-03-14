@@ -32,12 +32,15 @@ public class Produto implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
   private String nome;
   private Double preco;
 
   @JsonIgnore
   @ManyToMany
-  @JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"),
+  @JoinTable(
+      name = "PRODUTO_CATEGORIA",
+      joinColumns = @JoinColumn(name = "produto_id"),
       inverseJoinColumns = @JoinColumn(name = "categoria_id"))
   private List<Categoria> categorias = new ArrayList<>();
 
@@ -62,12 +65,9 @@ public class Produto implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Produto other = (Produto) obj;
     return Objects.equals(id, other.id);
   }

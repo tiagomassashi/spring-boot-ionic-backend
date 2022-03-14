@@ -12,11 +12,13 @@ import net.bytebuddy.utility.RandomString;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-  private ClienteRepository clienteRepository;
-  private BCryptPasswordEncoder passwordEncoder;
-  private EmailService emailService;
+  private final ClienteRepository clienteRepository;
+  private final BCryptPasswordEncoder passwordEncoder;
+  private final EmailService emailService;
 
-  public AuthServiceImpl(ClienteRepository clienteRepository, BCryptPasswordEncoder passwordEncoder,
+  public AuthServiceImpl(
+      ClienteRepository clienteRepository,
+      BCryptPasswordEncoder passwordEncoder,
       EmailService emailService) {
     this.clienteRepository = clienteRepository;
     this.passwordEncoder = passwordEncoder;
@@ -25,8 +27,10 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public void sendNewPassword(String email) {
-    Cliente cliente = clienteRepository.findByEmail(email)
-        .orElseThrow(() -> new ObjectNotFoundException("Email não encontrado"));
+    Cliente cliente =
+        clienteRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new ObjectNotFoundException("Email não encontrado"));
 
     String newPass = newPassword();
     cliente.setSenha(passwordEncoder.encode(newPass));

@@ -26,6 +26,7 @@ public class Endereco implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
   private String logradouro;
   private String numero;
   private String complemento;
@@ -48,12 +49,9 @@ public class Endereco implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Endereco other = (Endereco) obj;
     return Objects.equals(id, other.id);
   }

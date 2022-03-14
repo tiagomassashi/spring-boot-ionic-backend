@@ -16,7 +16,7 @@ import br.com.nagata.dev.service.CategoriaService;
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
 
-  private CategoriaRepository repository;
+  private final CategoriaRepository repository;
 
   @Autowired
   public CategoriaServiceImpl(CategoriaRepository repository) {
@@ -25,8 +25,12 @@ public class CategoriaServiceImpl implements CategoriaService {
 
   @Override
   public Categoria find(Integer id) {
-    return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
-        "Objeto não encontrado ID: " + id + ", Tipo: " + Categoria.class.getName()));
+    return repository
+        .findById(id)
+        .orElseThrow(
+            () ->
+                new ObjectNotFoundException(
+                    "Objeto não encontrado ID: " + id + ", Tipo: " + Categoria.class.getName()));
   }
 
   @Override

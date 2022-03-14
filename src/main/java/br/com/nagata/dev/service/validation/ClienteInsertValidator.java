@@ -13,7 +13,7 @@ import br.com.nagata.dev.service.validation.utils.BR;
 
 public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
 
-  private ClienteRepository repository;
+  private final ClienteRepository repository;
 
   @Autowired
   public ClienteInsertValidator(ClienteRepository repository) {
@@ -36,11 +36,14 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
       list.add(new FieldMessage("email", "Email já existente"));
     }
 
-    list.stream().forEach(fieldMessage -> {
-      context.disableDefaultConstraintViolation();
-      context.buildConstraintViolationWithTemplate(fieldMessage.getMessage())
-          .addPropertyNode(fieldMessage.getFieldName()).addConstraintViolation();
-    });
+    list.forEach(
+        fieldMessage -> {
+          context.disableDefaultConstraintViolation();
+          context
+              .buildConstraintViolationWithTemplate(fieldMessage.getMessage())
+              .addPropertyNode(fieldMessage.getFieldName())
+              .addConstraintViolation();
+        });
 
     return list.isEmpty();
   }

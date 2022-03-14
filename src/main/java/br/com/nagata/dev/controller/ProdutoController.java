@@ -17,7 +17,7 @@ import br.com.nagata.dev.service.ProdutoService;
 @RequestMapping(value = "/produtos")
 public class ProdutoController {
 
-  private ProdutoService service;
+  private final ProdutoService service;
 
   @Autowired
   public ProdutoController(ProdutoService service) {
@@ -37,7 +37,16 @@ public class ProdutoController {
       @RequestParam(name = "size", defaultValue = "24", required = false) Integer size,
       @RequestParam(name = "orderBY", defaultValue = "nome", required = false) String orderBy,
       @RequestParam(name = "direction", defaultValue = "ASC", required = false) String direction) {
-    return ResponseEntity.ok().body(service.search(URL.decodeParam(nome),
-        URL.decodeIntList(categorias), page, size, orderBy, direction).map(ProdutoDTO::new));
+    return ResponseEntity.ok()
+        .body(
+            service
+                .search(
+                    URL.decodeParam(nome),
+                    URL.decodeIntList(categorias),
+                    page,
+                    size,
+                    orderBy,
+                    direction)
+                .map(ProdutoDTO::new));
   }
 }
