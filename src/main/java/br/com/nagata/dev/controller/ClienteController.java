@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.nagata.dev.model.Cliente;
 import br.com.nagata.dev.model.dto.ClienteDTO;
@@ -27,7 +28,7 @@ import br.com.nagata.dev.service.ClienteService;
 @RequestMapping(value = "/clientes")
 public class ClienteController {
 
-  private ClienteService service;
+  private final ClienteService service;
 
   @Autowired
   public ClienteController(ClienteService service) {
@@ -42,13 +43,17 @@ public class ClienteController {
   @PostMapping
   public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteDto) {
     Cliente cliente = service.insert(service.fromDTO(clienteDto));
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(cliente.getId()).toUri();
+    URI uri =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(cliente.getId())
+            .toUri();
     return ResponseEntity.created(uri).build();
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO clienteDto, @PathVariable Integer id) {
+  public ResponseEntity<Void> update(
+      @Valid @RequestBody ClienteDTO clienteDto, @PathVariable Integer id) {
     clienteDto.setId(id);
     service.update(new Cliente(clienteDto));
     return ResponseEntity.noContent().build();
@@ -77,5 +82,12 @@ public class ClienteController {
       @RequestParam(name = "direction", defaultValue = "ASC", required = false) String direction) {
     return ResponseEntity.ok()
         .body(service.findPage(page, size, orderBy, direction).map(ClienteDTO::new));
+  }
+
+  @PostMapping("/picture")
+  public ResponseEntity<Void> uploadProfilePicture(
+      @RequestParam(name = "file") MultipartFile file) {
+    URI uri = service.uploadProfilePicture(file);
+    return ResponseEntity.created(uri).build();
   }
 }

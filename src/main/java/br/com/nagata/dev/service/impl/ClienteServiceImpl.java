@@ -1,18 +1,5 @@
 package br.com.nagata.dev.service.impl;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import br.com.nagata.dev.exception.AuthorizationException;
 import br.com.nagata.dev.exception.DataIntegrityException;
 import br.com.nagata.dev.exception.ObjectNotFoundException;
@@ -26,22 +13,45 @@ import br.com.nagata.dev.repository.ClienteRepository;
 import br.com.nagata.dev.repository.EnderecoRepository;
 import br.com.nagata.dev.security.UserSS;
 import br.com.nagata.dev.service.ClienteService;
+import br.com.nagata.dev.service.S3Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
-  private ClienteRepository repository;
-  private CidadeRepository cidadeRepository;
-  private EnderecoRepository enderecoRepository;
-  private BCryptPasswordEncoder passwordEncoder;
+  private final ClienteRepository repository;
+  private final CidadeRepository cidadeRepository;
+  private final EnderecoRepository enderecoRepository;
+  private final BCryptPasswordEncoder passwordEncoder;
+  private final S3Service s3Service;
 
   @Autowired
-  public ClienteServiceImpl(ClienteRepository repository, CidadeRepository cidadeRepository,
-      EnderecoRepository enderecoRepository, BCryptPasswordEncoder passwordEncoder) {
+  public ClienteServiceImpl(
+      ClienteRepository repository,
+      CidadeRepository cidadeRepository,
+      EnderecoRepository enderecoRepository,
+      BCryptPasswordEncoder passwordEncoder,
+      S3Service s3Service) {
     this.repository = repository;
     this.cidadeRepository = cidadeRepository;
     this.enderecoRepository = enderecoRepository;
     this.passwordEncoder = passwordEncoder;
+    this.s3Service = s3Service;
   }
 
   @Override
@@ -52,8 +62,12 @@ public class ClienteServiceImpl implements ClienteService {
       throw new AuthorizationException("Acesso negado");
     }
 
-    return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
-        "Objeto não encontrado ID: " + id + ", Tipo: " + Cliente.class.getName()));
+    return repository
+        .findById(id)
+        .orElseThrow(
+            () ->
+                new ObjectNotFoundException(
+                    "Objeto não encontrado ID: " + id + ", Tipo: " + Cliente.class.getName()));
   }
 
   @Transactional
@@ -104,16 +118,38 @@ public class ClienteServiceImpl implements ClienteService {
     Set<Perfil> perfis = new HashSet<>();
     perfis.add(Perfil.CLIENTE);
 
-    Cliente cliente = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpfOuCnpj(),
-        dto.getTipo(), passwordEncoder.encode(dto.getSenha()), null, null, perfis, null);
+    Cliente cliente =
+        new Cliente(
+            null,
+            dto.getNome(),
+            dto.getEmail(),
+            dto.getCpfOuCnpj(),
+            dto.getTipo(),
+            passwordEncoder.encode(dto.getSenha()),
+            null,
+            null,
+            perfis,
+            null);
 
-    Cidade cidade = cidadeRepository.findById(dto.getCidadeId()).orElseThrow(
-        () -> new ObjectNotFoundException("Cidade não encontrada ID: " + dto.getCidadeId()));
+    Cidade cidade =
+        cidadeRepository
+            .findById(dto.getCidadeId())
+            .orElseThrow(
+                () ->
+                    new ObjectNotFoundException("Cidade não encontrada ID: " + dto.getCidadeId()));
 
-    Endereco endereco = new Endereco(null, dto.getLogradouro(), dto.getNumero(),
-        dto.getComplemento(), dto.getBairro(), dto.getCep(), cliente, cidade);
+    Endereco endereco =
+        new Endereco(
+            null,
+            dto.getLogradouro(),
+            dto.getNumero(),
+            dto.getComplemento(),
+            dto.getBairro(),
+            dto.getCep(),
+            cliente,
+            cidade);
 
-    cliente.setEnderecos(Arrays.asList(endereco));
+    cliente.setEnderecos(List.of(endereco));
 
     Set<String> telefones = new HashSet<String>();
     telefones.add(dto.getTelefone1());
@@ -129,5 +165,10 @@ public class ClienteServiceImpl implements ClienteService {
     cliente.setTelefones(telefones);
 
     return cliente;
+  }
+
+  @Override
+  public URI uploadProfilePicture(MultipartFile multipartFile) {
+    return s3Service.uploadFile(multipartFile);
   }
 }

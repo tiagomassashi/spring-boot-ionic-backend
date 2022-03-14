@@ -40,7 +40,7 @@ jwt:
 # Configuracao AWS  
 aws:
   access_key_id:
-  secret_access_key:
+  secret_access_key_id:
 s3:
-  bucket: curso-spring-ionic
+  bucket: nagata-spring-ionic
   region: sa-east-1

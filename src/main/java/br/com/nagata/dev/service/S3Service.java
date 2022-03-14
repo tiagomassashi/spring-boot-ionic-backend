@@ -1,6 +1,13 @@
 package br.com.nagata.dev.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.net.URI;
+
 public interface S3Service {
 
-  void uploadFile(String localFilePath);
+  URI uploadFile(MultipartFile multipartFile);
+
+  URI uploadFile(InputStream is, String fileName, String contentType);
 }
