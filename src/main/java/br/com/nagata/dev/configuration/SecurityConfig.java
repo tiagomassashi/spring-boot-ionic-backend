@@ -1,6 +1,9 @@
 package br.com.nagata.dev.configuration;
 
-import java.util.Arrays;
+import br.com.nagata.dev.security.JWTAuthenticationFilter;
+import br.com.nagata.dev.security.JWTAuthorizationFilter;
+import br.com.nagata.dev.security.JWTUtil;
+import br.com.nagata.dev.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import br.com.nagata.dev.security.JWTAuthenticationFilter;
-import br.com.nagata.dev.security.JWTAuthorizationFilter;
-import br.com.nagata.dev.security.JWTUtil;
-import br.com.nagata.dev.service.impl.UserDetailsServiceImpl;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -72,8 +73,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+    config.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+    source.registerCorsConfiguration("/**", config);
     return (CorsConfigurationSource) source;
   }
 
