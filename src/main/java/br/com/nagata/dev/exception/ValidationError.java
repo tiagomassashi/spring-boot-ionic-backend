@@ -1,9 +1,10 @@
 package br.com.nagata.dev.exception;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,8 +14,9 @@ public class ValidationError extends StandardError {
 
   private List<FieldMessage> errors = new ArrayList<>();
 
-  public ValidationError(int value, String message, long currentTimeMillis) {
-    super(value, message, currentTimeMillis);
+  public ValidationError(
+      long timestamp, Integer status, String error, String message, String path) {
+    super(timestamp, status, error, message, path);
   }
 
   public List<FieldMessage> getErrors() {
