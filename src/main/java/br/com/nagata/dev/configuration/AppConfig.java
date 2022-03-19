@@ -16,7 +16,7 @@ public class AppConfig {
 
   private static final String PROFILE_LOCAL = "local";
 
-  private Environment env;
+  private final Environment env;
 
   @Autowired
   public AppConfig(Environment env) {
