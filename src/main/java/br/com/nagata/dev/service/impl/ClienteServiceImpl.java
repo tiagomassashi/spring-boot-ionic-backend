@@ -114,6 +114,25 @@ public class ClienteServiceImpl implements ClienteService {
   }
 
   @Override
+  public Cliente findByEmail(String email) {
+    UserSS user = UserServiceImpl.authenticated();
+
+    if (user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+      throw new AuthorizationException("Acesso negado");
+    }
+
+    return repository
+        .findByEmail(email)
+        .orElseThrow(
+            () ->
+                new ObjectNotFoundException(
+                    "Objeto não encontrado ID: "
+                        + user.getId()
+                        + ", Tipo: "
+                        + Cliente.class.getName()));
+  }
+
+  @Override
   public Page<Cliente> findPage(Integer page, Integer size, String orderBy, String direction) {
     PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction), orderBy);
     return repository.findAll(pageRequest);
