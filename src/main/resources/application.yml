@@ -32,6 +32,12 @@ spring.mail:
           enable: true
         ssl: true
 
+# Configuracao do Swagger
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
 # Configuracao de seguranca
 jwt:
   secret: SequenciaDeCaracteresParaAssinarToken
