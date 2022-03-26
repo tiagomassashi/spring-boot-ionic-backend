@@ -1,26 +1,22 @@
 package br.com.nagata.dev.controller;
 
-import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
+import br.com.nagata.dev.model.Categoria;
+import br.com.nagata.dev.model.dto.CategoriaDTO;
+import br.com.nagata.dev.service.CategoriaService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import br.com.nagata.dev.model.Categoria;
-import br.com.nagata.dev.model.dto.CategoriaDTO;
-import br.com.nagata.dev.service.CategoriaService;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -33,12 +29,14 @@ public class CategoriaController {
     this.service = service;
   }
 
+  @ApiOperation("Busca por id")
   @GetMapping("/{id}")
   public ResponseEntity<Categoria> find(@PathVariable Integer id) {
     return ResponseEntity.ok().body(service.find(id));
   }
 
   @PreAuthorize("hasAnyRole('ADMIN')")
+  @ApiOperation("Insere categoria")
   @PostMapping
   public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDto) {
     Categoria categoria = service.insert(new Categoria(categoriaDto));
@@ -51,6 +49,7 @@ public class CategoriaController {
   }
 
   @PreAuthorize("hasAnyRole('ADMIN')")
+  @ApiOperation("Atualiza categoria")
   @PutMapping("/{id}")
   public ResponseEntity<Void> update(
       @Valid @RequestBody CategoriaDTO categoriaDto, @PathVariable Integer id) {
@@ -59,19 +58,29 @@ public class CategoriaController {
     return ResponseEntity.noContent().build();
   }
 
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            code = 400,
+            message = "Não é possível excluir uma categoria que possui produtos"),
+        @ApiResponse(code = 404, message = "Código inexistente")
+      })
   @PreAuthorize("hasAnyRole('ADMIN')")
+  @ApiOperation("Deleta categoria")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Integer id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
   }
 
+  @ApiOperation("Retona todas categorias")
   @GetMapping
   public ResponseEntity<List<CategoriaDTO>> findAll() {
     return ResponseEntity.ok()
         .body(service.findAll().stream().map(CategoriaDTO::new).collect(Collectors.toList()));
   }
 
+  @ApiOperation("Retorna todas categorias com paginação")
   @GetMapping("/page")
   public ResponseEntity<Page<CategoriaDTO>> findPage(
       @RequestParam(name = "page", defaultValue = "0", required = false) Integer page,
